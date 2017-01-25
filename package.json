@@ -1,13 +1,13 @@
 {
   "name": "customization-resolver-webpack-plugin",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Makes file imported by relative path overridable from within customization folder",
   "license": "MIT",
   "private": false,
   "author": {
-    "name": "e",
-    "email": "i",
-    "url": "http://foo.de"
+    "name": "Stefan Gojan",
+    "email": "stefan.gojan@gmail.com",
+    "url": "http://stefan-gojan.de"
   },
   "main": "lib/index.js",
   "keywords": [
