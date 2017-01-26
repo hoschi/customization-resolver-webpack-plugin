@@ -43,6 +43,12 @@ let webpackConfig = {
 }
 ```
 
+## Run with debug output
+
+Say you start your bundling process with `webpack ./app.js`. Use
+`NODE_DEBUG=customization-resolver-webpack-plugin webpack ./app.js` to see
+debug output of this plugin.
+
 ## License
 
  MIT ©
