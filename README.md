@@ -9,20 +9,43 @@
 ## Install
 
 ```sh
-npm install --save customization-resolver-webpack-plugin
+npm install --save-dev customization-resolver-webpack-plugin
 ```
 
-## Usage
+## Usage with webpack 1.x
 
 ```js
-import customizationResolverWebpackPlugin from 'customization-resolver-webpack-plugin'
+import path from 'path';
+import CustomizationResolverPlugin from 'customization-resolver-webpack-plugin';
 
-customizationResolverWebpackPlugin()
+let dir_base = path.resolve(__dirname, '../');
+let dir_customize = path.resolve(dir_base, '../../customizedSrc/');
+let dir_src = path.resolve(dir_base, 'src/');
+
+let webpackConfig = {
+    entry:'...',
+    target:'web',
+    // other webpack config stuff
+    plugins: [
+        new webpack.ResolverPlugin([
+            new CustomizationResolverPlugin({
+                customizationDir: dir_customize,
+                sourceDir: dir_src
+            })
+        ])
+    ],
+    resolve: {
+        root: [
+            dir_customize,
+            dir_src,
+        ],
+    },
+}
 ```
 
 ## License
 
- MIT ©  [e](http://foo.de)
+ MIT ©
 
 [npm-url]: https://npmjs.org/package/customization-resolver-webpack-plugin
 [npm-image]: https://img.shields.io/npm/v/customization-resolver-webpack-plugin.svg?style=flat
