@@ -43,6 +43,15 @@ let webpackConfig = {
 }
 ```
 
+## Configuration
+
+* `sourceDir` *required* String: absolute path to source directory, containing files which can be overriden
+* `customizationDir` *required* String: absolute path to customization directory, containing files which can override source files
+* `excludePath` String/RegEx: RegEx which matches `path` property of request object which should not be resolved, defaults to 'node_modules'
+* `excludeRequest` String/RegEx: RegEx which matches `request` property of request object which should not be resolved, defaults to 'node_modules'
+* `jsFileExtension` String: JS file extension (with dot) which gets added to file names without file extension, defaults to '.js'
+* `isCompleteFileName` String/RegEx: RegEx which matches `request` property of request object to identify filenames with a valid extension. E.g. `/\.scss$/` to match SCSS files.
+
 ## Run with debug output
 
 Say you start your bundling process with `webpack ./app.js`. Use

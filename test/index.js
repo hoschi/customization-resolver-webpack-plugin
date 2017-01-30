@@ -318,11 +318,44 @@ test('resolves source file when customized one was requested and it doesn\'t exi
     }, 'resolved customized file');
 });
 
+test('resolves source JSX file with file ending ".jsx"', (t) => {
+    let request;
+    let plugin = new Plugin({
+        customizationDir: '/repo/myProject/customer0/frontend',
+        sourceDir: '/repo/myProject/core/src',
+        isCompleteFileName: /\.scss$/,
+        jsFileExtension: '.jsx',
+    });
+    let finalCallback = sinon.spy();
+    let fileFakePaths = [
+        '/repo/myProject/core/src/components/BigButton.jsx',
+    ];
+    let {handler, doResolve} = getHandler(plugin, fileFakePaths);
+
+    request = {
+        path: '/repo/myProject/core/src/components',
+        query: '?foo=bar',
+        request: './BigButton',
+    };
+    handler(request, finalCallback);
+
+    t.true(finalCallback.callCount === 0);
+    t.true(doResolve.callCount === 1);
+    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.deepEqual(doResolve.lastCall.args[1], {
+        path: '/repo/myProject/core/src/components/BigButton.jsx',
+        query: request.query,
+        file: true,
+        resolved: true,
+    }, 'adds ".jsx" instead of ".js" to file name');
+});
+
 test('resolves source file with file ending', (t) => {
     let request;
     let plugin = new Plugin({
         customizationDir: '/repo/myProject/customer0/frontend',
         sourceDir: '/repo/myProject/core/src',
+        isCompleteFileName: /\.scss$/,
     });
     let finalCallback = sinon.spy();
     let fileFakePaths = [
@@ -345,6 +378,5 @@ test('resolves source file with file ending', (t) => {
         query: request.query,
         file: true,
         resolved: true,
-    }, 'resolved with source file, because no customization file exists');
+    }, 'resolves file without treating it as a JS file');
 });
-
