@@ -1,3 +1,20 @@
 {
-  "extends": "oniyi"
+    "extends": "oniyi",
+    "rules": {
+        "semi": [1, "always"],
+        "quotes": [1, "single", {
+            "allowTemplateLiterals": true
+        }],
+        "comma-dangle": [1, "always-multiline"],
+        "no-console": 1,
+        "indent": "off",
+        "prefer-const": "off",
+        "object-curly-spacing": "off",
+        "one-var": "off",
+        "one-var-declaration-per-line": "off",
+        "no-shadow": "off",
+        "space-before-function-paren": 0,
+        "eqeqeq": "warn", // require the use of === and !==
+        "no-ternary": "warn"
+    }
 }
