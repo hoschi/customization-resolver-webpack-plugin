@@ -25,6 +25,12 @@ function getHandler (plugin, fileFakePaths = []) {
         plugin(type, handlerParam) {
             handler = handlerParam.bind(fakeEnv);
         },
+        parse(request) {
+            return {
+                request,
+                parsed: true,
+            };
+        },
     };
 
     plugin.apply(resolver);
@@ -58,7 +64,7 @@ test('does\'t resolve excluded path', (t) => {
     });
     let finalCallback = sinon.spy();
     let fileFakePaths = [
-        '/repo/myProject/core/src/components/BigButton.js',
+        '/repo/myProject/customer0/frontend/components/BigButton.js',
     ];
     let {handler, doResolve} = getHandler(plugin, fileFakePaths);
 
@@ -80,12 +86,12 @@ test('does\'t resolve excluded path', (t) => {
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1, 'resolved because path is not excluded');
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: fileFakePaths[0],
-        query: undefined,
-        file: true,
-        resolved: true,
+        path: '/repo/myProject/customer0/frontend/components',
+        request: request.request,
+        parsed: true,
     }, 'resolved with object containing all necessary information');
 });
 
@@ -98,7 +104,7 @@ test('does\'t resolve excluded request', (t) => {
     });
     let finalCallback = sinon.spy();
     let fileFakePaths = [
-        '/repo/myProject/core/src/components/BigButton.js',
+        '/repo/myProject/customer0/frontend/components/BigButton.js',
     ];
     let {handler, doResolve} = getHandler(plugin, fileFakePaths);
 
@@ -120,12 +126,12 @@ test('does\'t resolve excluded request', (t) => {
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1, 'resolved because request is not excluded');
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: fileFakePaths[0],
-        query: undefined,
-        file: true,
-        resolved: true,
+        path: '/repo/myProject/customer0/frontend/components',
+        request: request.request,
+        parsed: true,
     }, 'resolved with object containing all necessary information');
 });
 
@@ -188,12 +194,13 @@ test('resolves source file when not customized', (t) => {
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1);
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: '/repo/myProject/core/src/components/BigButton.js',
+        path: '/repo/myProject/core/src/components',
         query: request.query,
-        file: true,
-        resolved: true,
+        request: request.request,
+        parsed: true,
     }, 'resolved with source file, because no customization file exists');
 });
 
@@ -218,12 +225,13 @@ test('resolves customized file', (t) => {
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1);
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: '/repo/myProject/customer0/frontend/components/BigButton.js',
+        path: '/repo/myProject/customer0/frontend/components',
         query: request.query,
-        file: true,
-        resolved: true,
+        request: request.request,
+        parsed: true,
     }, 'path changed from source to customization fiile');
 });
 
@@ -249,12 +257,13 @@ test('resolve logic prefers customization file of source file', (t) => {
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1);
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: '/repo/myProject/customer0/frontend/components/BigButton.js',
+        path: '/repo/myProject/customer0/frontend/components',
         query: request.query,
-        file: true,
-        resolved: true,
+        request: request.request,
+        parsed: true,
     }, 'resolved with customized file and not source file');
 });
 
@@ -279,12 +288,13 @@ test('resolves customized file when it was requested and it exists', (t) => {
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1);
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: '/repo/myProject/customer0/frontend/components/BigButton.js',
+        path: '/repo/myProject/customer0/frontend/components',
         query: request.query,
-        file: true,
-        resolved: true,
+        request: request.request,
+        parsed: true,
     }, 'resolved customized file');
 });
 
@@ -309,13 +319,14 @@ test('resolves source file when customized one was requested and it doesn\'t exi
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1);
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: '/repo/myProject/core/src/components/BigButton.js',
+        path: '/repo/myProject/core/src/components',
         query: request.query,
-        file: true,
-        resolved: true,
-    }, 'resolved customized file');
+        request: request.request,
+        parsed: true,
+    }, 'resolved source file');
 });
 
 test('resolves source JSX file with file ending ".jsx"', (t) => {
@@ -341,12 +352,13 @@ test('resolves source JSX file with file ending ".jsx"', (t) => {
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1);
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: '/repo/myProject/core/src/components/BigButton.jsx',
+        path: '/repo/myProject/core/src/components',
         query: request.query,
-        file: true,
-        resolved: true,
+        request: request.request,
+        parsed: true,
     }, 'adds ".jsx" instead of ".js" to file name');
 });
 
@@ -372,11 +384,12 @@ test('resolves source file with file ending', (t) => {
 
     t.true(finalCallback.callCount === 0);
     t.true(doResolve.callCount === 1);
-    t.true(doResolve.lastCall.args[0] === 'result', 'resolves as result, because it is an existing file');
+    t.true(doResolve.lastCall.args[0] === 'parsed-resolve',
+        'resolves as parsed-resolve, because we skip one step');
     t.deepEqual(doResolve.lastCall.args[1], {
-        path: '/repo/myProject/core/src/components/bigButton.scss',
+        path: '/repo/myProject/core/src/components',
         query: request.query,
-        file: true,
-        resolved: true,
+        request: request.request,
+        parsed: true,
     }, 'resolves file without treating it as a JS file');
 });

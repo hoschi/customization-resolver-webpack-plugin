@@ -19,7 +19,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "ava --verbose",
-    "test:watch": "npm test -- --watch",
+    "test:watch": "ava --watch",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov",
     "preversion": "npm run lint && npm run coverage"
   },
@@ -42,7 +42,8 @@
     "sinon": "1.17.7"
   },
   "dependencies": {
-    "oniyi-logger": "1.0.0"
+    "oniyi-logger": "1.0.0",
+    "ramda": "0.23.0"
   },
   "nyc": {
     "exclude": [

@@ -8,11 +8,14 @@
 
 ## Install
 
+This is for webpack 2.x, for webpack 1.x see
+[this version](https://github.com/hoschi/customization-resolver-webpack-plugin/tree/v1.0.1  ).
+
 ```sh
 npm install --save-dev customization-resolver-webpack-plugin
 ```
 
-## Usage with webpack 1.x
+## Usage with webpack
 
 ```js
 import path from 'path';
@@ -26,18 +29,16 @@ let webpackConfig = {
     entry:'...',
     target:'web',
     // other webpack config stuff
-    plugins: [
-        new webpack.ResolverPlugin([
+    resolve: {
+        modules: [
+            dir_customize,
+            dir_src,
+        ],
+        plugins: [
             new CustomizationResolverPlugin({
                 customizationDir: dir_customize,
                 sourceDir: dir_src
             })
-        ])
-    ],
-    resolve: {
-        root: [
-            dir_customize,
-            dir_src,
         ],
     },
 }
