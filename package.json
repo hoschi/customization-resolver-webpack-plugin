@@ -1,6 +1,6 @@
 {
   "name": "customization-resolver-webpack-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Makes file imported by relative path overridable from within customization folder",
   "license": "MIT",
   "private": false,
